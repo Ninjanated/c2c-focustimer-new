@@ -1,7 +1,12 @@
 const display = document.querySelector('.display');
-const startPauseBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
+const startPauseBtn = document.getElementById('startPauseBtn');
 const resetBtn = document.getElementById('resetBtn');
+const addFiveBtn = document.getElementById('addFiveBtn');
+const addFifteenBtn = document.getElementById('addFifteenBtn');
+const addThirtyBtn = document.getElementById('addThirtyBtn');
+const removeFiveBtn = document.getElementById('removeFiveBtn');
+const removeFifteenBtn = document.getElementById('removeFifteenBtn');
+const removeThirtyBtn = document.getElementById('removeThirtyBtn');
 const minutesInput = document.getElementById('minutesInput');
 const secondsInput = document.getElementById('secondsInput');
 const modeIndicator = document.querySelector('.mode-indicator');
@@ -203,15 +208,10 @@ function stopTimer() {
     clearInterval(timerId);
     isRunning = false;
     timerId = null;
-    startPauseBtn.textContent = 'Start';
-    stopBtn.disabled = true;
-    timeLeft = getTimeFromInputs();
-    updateDisplay();
 }
 
 // Event Listeners
 startPauseBtn.addEventListener('click', startTimer);
-stopBtn.addEventListener('click', stopTimer);
 resetBtn.addEventListener('click', resetToDefault);
 
 // Input validation and time updates
@@ -267,3 +267,28 @@ settingsPopup.addEventListener('click', (e) => {
 
 // Update settingsCloseBtn event listener
 settingsCloseBtn.addEventListener('click', closeSettings);
+
+// Get buttons
+const addTenBtn = document.getElementById('addTenBtn');
+const removeTenBtn = document.getElementById('removeTenBtn');
+
+// Add time functions
+function addTime(seconds) {
+    timeLeft += seconds;
+    updateDisplay();
+}
+
+function removeTime(seconds) {
+    if (timeLeft > seconds) {
+        timeLeft -= seconds;
+    } else {
+        timeLeft = 0;
+    }
+    updateDisplay();
+}
+
+// Add event listeners for quick-add and quick-remove buttons
+addTenBtn.addEventListener('click', () => addTime(10));
+addThirtyBtn.addEventListener('click', () => addTime(30));
+removeTenBtn.addEventListener('click', () => removeTime(10));
+removeThirtyBtn.addEventListener('click', () => removeTime(30));

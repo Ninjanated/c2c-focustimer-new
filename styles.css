@@ -98,14 +98,78 @@ body::after {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.quick-adjust-container {
+    margin: 1.5rem 0;
+    text-align: center;
+    position: relative;
+}
+
+.quick-adjust-container::after {
+    content: '';
+    position: absolute;
+    bottom: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(260px + 3rem);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.quick-adjust-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
 .buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
+    margin: 0.5rem 0;
 }
 
-button {
+.buttons:first-of-type {
+    margin-bottom: 0.5rem;
+}
+
+.buttons:nth-of-type(2) {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.buttons:nth-of-type(2)::before {
+    content: '';
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(260px + 3rem);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.buttons:nth-of-type(3) {
+    margin-top: 0.5rem;
+    position: relative;
+}
+
+.buttons:nth-of-type(3)::before {
+    content: '';
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.buttons button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     border-radius: 12px;
@@ -119,47 +183,20 @@ button {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-button:hover:not(:disabled) {
+.buttons button:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-#startBtn {
+#startPauseBtn {
     background: #40E0D0;
     color: #000033;
     border: none;
 }
 
-#startBtn:hover:not(:disabled) {
+#startPauseBtn:hover:not(:disabled) {
     background: #45e5d5;
-}
-
-#pauseBtn {
-    background-color: #666;
-    color: white;
-}
-
-#pauseBtn:hover {
-    background-color: #555;
-}
-
-#stopBtn {
-    background-color: #333;
-    color: white;
-}
-
-#stopBtn:hover:not(:disabled) {
-    background-color: #222;
-}
-
-#addFiveBtn {
-    background-color: #666;
-    color: white;
-}
-
-#addFiveBtn:hover:not(:disabled) {
-    background-color: #555;
 }
 
 #resetBtn {
@@ -169,6 +206,29 @@ button:hover:not(:disabled) {
 
 #resetBtn:hover:not(:disabled) {
     background-color: #222;
+}
+
+#addTenBtn, #addThirtyBtn,
+#removeTenBtn, #removeThirtyBtn {
+    background-color: #666;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+    max-width: 100px;
+}
+
+#addTenBtn:hover, #addThirtyBtn:hover,
+#removeTenBtn:hover, #removeThirtyBtn:hover {
+    background-color: #555;
+}
+
+#removeTenBtn, #removeThirtyBtn {
+    background-color: #444;
+}
+
+#removeTenBtn:hover, #removeThirtyBtn:hover {
+    background-color: #333;
 }
 
 button:disabled {
