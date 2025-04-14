@@ -112,8 +112,6 @@ function startTimer() {
         isRunning = true;
         startPauseBtn.textContent = 'Pause';
         stopBtn.disabled = false;
-        minutesInput.disabled = true;
-        secondsInput.disabled = true;
         
         timerId = setInterval(() => {
             timeLeft--;
@@ -123,9 +121,6 @@ function startTimer() {
                 stopTimer();
                 playNotification();
                 toggleMode();
-                
-                // Optional: Auto-start the next session
-                // setTimeout(startTimer, 1000);
             }
         }, 1000);
     } else {
@@ -147,8 +142,6 @@ function stopTimer() {
     timerId = null;
     startPauseBtn.textContent = 'Start';
     stopBtn.disabled = true;
-    minutesInput.disabled = false;
-    secondsInput.disabled = false;
     timeLeft = getTimeFromInputs();
     updateDisplay();
 }
@@ -158,15 +151,38 @@ startPauseBtn.addEventListener('click', startTimer);
 stopBtn.addEventListener('click', stopTimer);
 resetBtn.addEventListener('click', resetToDefault);
 
-// Input validation
+// Input validation and time updates
 minutesInput.addEventListener('input', function() {
     if (this.value < 0) this.value = 0;
     if (this.value > 59) this.value = 59;
+    if (!isRunning) {
+        timeLeft = getTimeFromInputs();
+        updateDisplay();
+    }
 });
 
 secondsInput.addEventListener('input', function() {
     if (this.value < 0) this.value = 0;
     if (this.value > 59) this.value = 59;
+    if (!isRunning) {
+        timeLeft = getTimeFromInputs();
+        updateDisplay();
+    }
+});
+
+// Add change event listeners for when timer is running
+minutesInput.addEventListener('change', function() {
+    if (isRunning) {
+        timeLeft = getTimeFromInputs();
+        updateDisplay();
+    }
+});
+
+secondsInput.addEventListener('change', function() {
+    if (isRunning) {
+        timeLeft = getTimeFromInputs();
+        updateDisplay();
+    }
 });
 
 // Initialize display
