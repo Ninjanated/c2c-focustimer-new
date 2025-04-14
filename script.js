@@ -16,6 +16,12 @@ const timeUpPopup = document.getElementById('timeUpPopup');
 const popupMessage = document.getElementById('popupMessage');
 const popupCloseBtn = document.getElementById('popupCloseBtn');
 
+// Get new elements
+const pausedIndicator = document.querySelector('.paused-indicator');
+const confirmationDialog = document.getElementById('confirmationDialog');
+const confirmSettingsBtn = document.getElementById('confirmSettingsBtn');
+const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
+
 // Initialize Audio Context
 let audioContext;
 // Initialize audio context on first user interaction
@@ -40,15 +46,40 @@ if ("Notification" in window) {
 
 // Settings popup handlers
 settingsBtn.addEventListener('click', () => {
-    settingsPopup.classList.add('show');
+    if (isRunning) {
+        confirmationDialog.classList.add('show');
+    } else {
+        openSettings();
+    }
 });
 
-settingsCloseBtn.addEventListener('click', () => {
+function openSettings() {
+    if (isRunning) {
+        pauseTimer();
+        pausedIndicator.classList.add('show');
+    }
+    settingsPopup.classList.add('show');
+}
+
+function closeSettings() {
     settingsPopup.classList.remove('show');
     if (!isRunning) {
         timeLeft = getTimeFromInputs();
         updateDisplay();
+    } else {
+        startTimer();
+        pausedIndicator.classList.remove('show');
     }
+}
+
+// Confirmation dialog handlers
+confirmSettingsBtn.addEventListener('click', () => {
+    confirmationDialog.classList.remove('show');
+    openSettings();
+});
+
+cancelSettingsBtn.addEventListener('click', () => {
+    confirmationDialog.classList.remove('show');
 });
 
 function formatTime(seconds) {
@@ -137,15 +168,9 @@ popupCloseBtn.addEventListener('click', () => {
 
 function startTimer() {
     if (!isRunning) {
-        // If timer wasn't running, get time from inputs
-        if (!timerId) {
-            timeLeft = getTimeFromInputs();
-        }
-        
         isRunning = true;
         startPauseBtn.textContent = 'Pause';
-        stopBtn.disabled = false;
-        
+        pausedIndicator.classList.remove('show');
         timerId = setInterval(() => {
             timeLeft--;
             updateDisplay();
@@ -170,6 +195,7 @@ function pauseTimer() {
         clearInterval(timerId);
         isRunning = false;
         startPauseBtn.textContent = 'Start';
+        pausedIndicator.classList.add('show');
     }
 }
 
@@ -224,3 +250,20 @@ secondsInput.addEventListener('change', function() {
 
 // Initialize display
 updateDisplay();
+
+// Close popup when clicking outside
+timeUpPopup.addEventListener('click', (e) => {
+    if (e.target === timeUpPopup) {
+        timeUpPopup.classList.remove('show');
+    }
+});
+
+// Close settings popup when clicking outside
+settingsPopup.addEventListener('click', (e) => {
+    if (e.target === settingsPopup) {
+        settingsPopup.classList.remove('show');
+    }
+});
+
+// Update settingsCloseBtn event listener
+settingsCloseBtn.addEventListener('click', closeSettings);

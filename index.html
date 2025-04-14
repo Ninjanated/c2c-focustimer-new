@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="timer-container">
+        <div class="paused-indicator">Timer Paused</div>
         <div class="mode-indicator">Focus Time</div>
         <button id="settingsBtn" class="settings-button">
             <span class="material-icons">settings</span>
@@ -43,6 +44,18 @@
             <h2>Time's Up!</h2>
             <p id="popupMessage"></p>
             <button id="popupCloseBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="confirmation-dialog" id="confirmationDialog">
+        <div class="confirmation-content">
+            <h2>Timer is Running</h2>
+            <p>Changing settings will pause the timer. Do you want to continue?</p>
+            <div class="confirmation-buttons">
+                <button id="confirmSettingsBtn">Yes, Change Settings</button>
+                <button id="cancelSettingsBtn">No, Keep Running</button>
+            </div>
         </div>
     </div>
 
