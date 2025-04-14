@@ -207,6 +207,29 @@ input[type="number"] {
     font-style: italic;
 }
 
+/* Settings Button */
+.settings-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.settings-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+}
+
+.settings-button .material-icons {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.5rem;
+}
+
 /* Popup Styles */
 .popup {
     display: none;
@@ -248,14 +271,16 @@ input[type="number"] {
     margin-bottom: 1.5rem;
 }
 
-#popupCloseBtn {
+#popupCloseBtn,
+#settingsCloseBtn {
     background: #40E0D0;
     color: #000033;
     border: none;
     padding: 0.75rem 2rem;
 }
 
-#popupCloseBtn:hover:not(:disabled) {
+#popupCloseBtn:hover:not(:disabled),
+#settingsCloseBtn:hover:not(:disabled) {
     background: #45e5d5;
 }
 

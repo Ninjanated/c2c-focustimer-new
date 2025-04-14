@@ -6,6 +6,16 @@ const minutesInput = document.getElementById('minutesInput');
 const secondsInput = document.getElementById('secondsInput');
 const modeIndicator = document.querySelector('.mode-indicator');
 
+// Settings popup elements
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsPopup = document.getElementById('settingsPopup');
+const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+
+// Time's up popup elements
+const timeUpPopup = document.getElementById('timeUpPopup');
+const popupMessage = document.getElementById('popupMessage');
+const popupCloseBtn = document.getElementById('popupCloseBtn');
+
 // Initialize Audio Context
 let audioContext;
 // Initialize audio context on first user interaction
@@ -28,10 +38,18 @@ if ("Notification" in window) {
     Notification.requestPermission();
 }
 
-// Add popup elements
-const popup = document.getElementById('timeUpPopup');
-const popupMessage = document.getElementById('popupMessage');
-const popupCloseBtn = document.getElementById('popupCloseBtn');
+// Settings popup handlers
+settingsBtn.addEventListener('click', () => {
+    settingsPopup.classList.add('show');
+});
+
+settingsCloseBtn.addEventListener('click', () => {
+    settingsPopup.classList.remove('show');
+    if (!isRunning) {
+        timeLeft = getTimeFromInputs();
+        updateDisplay();
+    }
+});
 
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -109,12 +127,12 @@ function playNotification() {
 
 function showPopup(message) {
     popupMessage.textContent = message;
-    popup.classList.add('show');
+    timeUpPopup.classList.add('show');
 }
 
 // Close popup when OK button is clicked
 popupCloseBtn.addEventListener('click', () => {
-    popup.classList.remove('show');
+    timeUpPopup.classList.remove('show');
 });
 
 function startTimer() {
