@@ -1,20 +1,20 @@
 const display = document.querySelector('.display');
 const startPauseBtn = document.getElementById('startPauseBtn');
 const resetBtn = document.getElementById('resetBtn');
-const addFiveBtn = document.getElementById('addFiveBtn');
-const addFifteenBtn = document.getElementById('addFifteenBtn');
+const addTenBtn = document.getElementById('addTenBtn');
 const addThirtyBtn = document.getElementById('addThirtyBtn');
-const removeFiveBtn = document.getElementById('removeFiveBtn');
-const removeFifteenBtn = document.getElementById('removeFifteenBtn');
+const removeTenBtn = document.getElementById('removeTenBtn');
 const removeThirtyBtn = document.getElementById('removeThirtyBtn');
-const minutesInput = document.getElementById('minutesInput');
-const secondsInput = document.getElementById('secondsInput');
 const modeIndicator = document.querySelector('.mode-indicator');
 
 // Settings popup elements
 const settingsBtn = document.getElementById('settingsBtn');
 const settingsPopup = document.getElementById('settingsPopup');
 const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+const workMinutesInput = document.getElementById('workMinutesInput');
+const workSecondsInput = document.getElementById('workSecondsInput');
+const restMinutesInput = document.getElementById('restMinutesInput');
+const restSecondsInput = document.getElementById('restSecondsInput');
 
 // Time's up popup elements
 const timeUpPopup = document.getElementById('timeUpPopup');
@@ -36,8 +36,8 @@ document.addEventListener('click', () => {
     }
 }, { once: true });
 
-const FOCUS_TIME = 25 * 60; // 25 minutes in seconds
-const REST_TIME = 5 * 60;  // 5 minutes in seconds
+let FOCUS_TIME = 25 * 60; // 25 minutes in seconds
+let REST_TIME = 5 * 60;  // 5 minutes in seconds
 
 let timeLeft = FOCUS_TIME;
 let timerId = null;
@@ -63,13 +63,23 @@ function openSettings() {
         pauseTimer();
         pausedIndicator.classList.add('show');
     }
+    // Set current values in settings
+    workMinutesInput.value = Math.floor(FOCUS_TIME / 60);
+    workSecondsInput.value = FOCUS_TIME % 60;
+    restMinutesInput.value = Math.floor(REST_TIME / 60);
+    restSecondsInput.value = REST_TIME % 60;
+    modeIndicator.textContent = isFocusMode ? 'Focus Time' : 'Rest Time';
     settingsPopup.classList.add('show');
 }
 
 function closeSettings() {
+    // Update durations from settings
+    FOCUS_TIME = parseInt(workMinutesInput.value) * 60 + parseInt(workSecondsInput.value);
+    REST_TIME = parseInt(restMinutesInput.value) * 60 + parseInt(restSecondsInput.value);
+    
     settingsPopup.classList.remove('show');
     if (!isRunning) {
-        timeLeft = getTimeFromInputs();
+        timeLeft = isFocusMode ? FOCUS_TIME : REST_TIME;
         updateDisplay();
     } else {
         startTimer();
@@ -97,18 +107,10 @@ function updateDisplay() {
     display.textContent = formatTime(timeLeft);
 }
 
-function getTimeFromInputs() {
-    const minutes = parseInt(minutesInput.value) || 0;
-    const seconds = parseInt(secondsInput.value) || 0;
-    return (minutes * 60) + seconds;
-}
-
 function toggleMode() {
     isFocusMode = !isFocusMode;
     timeLeft = isFocusMode ? FOCUS_TIME : REST_TIME;
     modeIndicator.textContent = isFocusMode ? 'Focus Time' : 'Rest Time';
-    minutesInput.value = isFocusMode ? '25' : '05';
-    secondsInput.value = '00';
     updateDisplay();
 }
 
@@ -116,8 +118,6 @@ function resetToDefault() {
     stopTimer();
     isFocusMode = true;
     modeIndicator.textContent = 'Focus Time';
-    minutesInput.value = "25";
-    secondsInput.value = "00";
     timeLeft = FOCUS_TIME;
     updateDisplay();
 }
@@ -214,42 +214,25 @@ function stopTimer() {
 startPauseBtn.addEventListener('click', startTimer);
 resetBtn.addEventListener('click', resetToDefault);
 
-// Input validation and time updates
-minutesInput.addEventListener('input', function() {
-    if (this.value < 0) this.value = 0;
-    if (this.value > 59) this.value = 59;
-    if (!isRunning) {
-        timeLeft = getTimeFromInputs();
-        updateDisplay();
-    }
-});
+// Quick adjust button handlers
+function addTime(seconds) {
+    timeLeft += seconds;
+    updateDisplay();
+}
 
-secondsInput.addEventListener('input', function() {
-    if (this.value < 0) this.value = 0;
-    if (this.value > 59) this.value = 59;
-    if (!isRunning) {
-        timeLeft = getTimeFromInputs();
-        updateDisplay();
+function removeTime(seconds) {
+    if (timeLeft > seconds) {
+        timeLeft -= seconds;
+    } else {
+        timeLeft = 0;
     }
-});
+    updateDisplay();
+}
 
-// Add change event listeners for when timer is running
-minutesInput.addEventListener('change', function() {
-    if (isRunning) {
-        timeLeft = getTimeFromInputs();
-        updateDisplay();
-    }
-});
-
-secondsInput.addEventListener('change', function() {
-    if (isRunning) {
-        timeLeft = getTimeFromInputs();
-        updateDisplay();
-    }
-});
-
-// Initialize display
-updateDisplay();
+addTenBtn.addEventListener('click', () => addTime(10));
+addThirtyBtn.addEventListener('click', () => addTime(30));
+removeTenBtn.addEventListener('click', () => removeTime(10));
+removeThirtyBtn.addEventListener('click', () => removeTime(30));
 
 // Close popup when clicking outside
 timeUpPopup.addEventListener('click', (e) => {
@@ -268,27 +251,13 @@ settingsPopup.addEventListener('click', (e) => {
 // Update settingsCloseBtn event listener
 settingsCloseBtn.addEventListener('click', closeSettings);
 
-// Get buttons
-const addTenBtn = document.getElementById('addTenBtn');
-const removeTenBtn = document.getElementById('removeTenBtn');
+// Input validation for all time inputs
+[workMinutesInput, workSecondsInput, restMinutesInput, restSecondsInput].forEach(input => {
+    input.addEventListener('input', function() {
+        if (this.value < 0) this.value = 0;
+        if (this.value > 59) this.value = 59;
+    });
+});
 
-// Add time functions
-function addTime(seconds) {
-    timeLeft += seconds;
-    updateDisplay();
-}
-
-function removeTime(seconds) {
-    if (timeLeft > seconds) {
-        timeLeft -= seconds;
-    } else {
-        timeLeft = 0;
-    }
-    updateDisplay();
-}
-
-// Add event listeners for quick-add and quick-remove buttons
-addTenBtn.addEventListener('click', () => addTime(10));
-addThirtyBtn.addEventListener('click', () => addTime(30));
-removeTenBtn.addEventListener('click', () => removeTime(10));
-removeThirtyBtn.addEventListener('click', () => removeTime(30));
+// Initialize display
+updateDisplay();

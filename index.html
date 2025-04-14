@@ -34,15 +34,23 @@
     <div class="popup" id="settingsPopup">
         <div class="popup-content">
             <h2>Timer Settings</h2>
-            <div class="duration-label">Duration (minutes)</div>
             <div class="time-input">
+                <label>Work Duration</label>
                 <div class="input-group">
-                    <input type="number" id="minutesInput" min="0" max="59" value="25">
+                    <input type="number" id="workMinutesInput" min="0" max="59" value="25">
                     <span>:</span>
-                    <input type="number" id="secondsInput" min="0" max="59" value="00">
+                    <input type="number" id="workSecondsInput" min="0" max="59" value="00">
                 </div>
             </div>
-            <button id="settingsCloseBtn">Save</button>
+            <div class="time-input">
+                <label>Rest Duration</label>
+                <div class="input-group">
+                    <input type="number" id="restMinutesInput" min="0" max="59" value="5">
+                    <span>:</span>
+                    <input type="number" id="restSecondsInput" min="0" max="59" value="00">
+                </div>
+            </div>
+            <button id="settingsCloseBtn">Save & Close</button>
         </div>
     </div>
 
