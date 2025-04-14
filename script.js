@@ -28,6 +28,11 @@ if ("Notification" in window) {
     Notification.requestPermission();
 }
 
+// Add popup elements
+const popup = document.getElementById('timeUpPopup');
+const popupMessage = document.getElementById('popupMessage');
+const popupCloseBtn = document.getElementById('popupCloseBtn');
+
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -102,6 +107,16 @@ function playNotification() {
     }
 }
 
+function showPopup(message) {
+    popupMessage.textContent = message;
+    popup.classList.add('show');
+}
+
+// Close popup when OK button is clicked
+popupCloseBtn.addEventListener('click', () => {
+    popup.classList.remove('show');
+});
+
 function startTimer() {
     if (!isRunning) {
         // If timer wasn't running, get time from inputs
@@ -120,6 +135,10 @@ function startTimer() {
             if (timeLeft <= 0) {
                 stopTimer();
                 playNotification();
+                const message = isFocusMode ? 
+                    "Focus session complete! Time for a break." : 
+                    "Break time is over! Ready to focus again?";
+                showPopup(message);
                 toggleMode();
             }
         }, 1000);
