@@ -190,13 +190,13 @@ body::after {
 }
 
 #startPauseBtn {
-    background: #FFB347;
+    background: rgba(255, 179, 71, 0.85);
     color: #000033;
     border: none;
 }
 
 #startPauseBtn:hover:not(:disabled) {
-    background: #FFC174;
+    background: rgba(255, 179, 71, 0.95);
 }
 
 #resetBtn {
